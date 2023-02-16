@@ -37,6 +37,10 @@ body {
     color: white;
 }
 
+.bg-black {
+    background: black;
+}
+
 .shop-now-button:hover,
 .shop-now-button:active,
 .shop-now-button:focus,
