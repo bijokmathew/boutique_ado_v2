@@ -48,21 +48,38 @@
                     <form class="form" method="POST" action="{% url 'add_to_bag' product.id %}">
                         {% csrf_token %}
                         <div class="form-row">
-                            <div class="col-12">
-                                <p class="mt-3"><strong>Quantity:</strong></p>
-                                <input class="form-control qty-input" type="number" name="quantity" value="1" min="1" max="99" id="id_qty_{{product.id}}">
-                            </div>
-                            <div class="col-12">
-                                <a href="{% url 'products' %}" class="mt-5 btn btn-outline-black rounded-0">
-                                    <span class="icon">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="text-uppercase">Keep shopping</span>
-                                </a>
-                                <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
-                            </div>
-                            <input type="hidden" name="redirect-url" value="{{request.path}}">
-
+                            {% with product.has_sizes as s %}
+                                {% if s %}
+                                    <div class="col-12">
+                                        <p><strong>Size:</strong></p>
+                                        <select class="form-control w-50 rounded-0" id="id_product_size" name="product_size">
+                                            <option value="xs">XS</option>
+                                            <option value="s">S</option>
+                                            <option value="m">M</option>
+                                            <option value="l">l</option>
+                                            <option value="xl">XL</option>
+                                          </select>
+                                    </div>
+                                {% endif %}    
+                                <div class="col-12">
+                                    <p class="mt-3"><strong>Quantity:</strong></p>
+                                    <div class="form-group w-50">
+                                        <div class="input-group">
+                                            <input class="form-control qty-input rounded-0" type="number" name="quantity" value="1" min="1" max="99" id="id_qty_{{product.id}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col{% if s %}-12 mt-2 {% endif %}">
+                                    <a href="{% url 'products' %}" class="mt-5 btn btn-outline-black rounded-0">
+                                        <span class="icon">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </span>
+                                        <span class="text-uppercase">Keep shopping</span>
+                                    </a>
+                                    <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
+                                </div>
+                                <input type="hidden" name="redirect-url" value="{{request.path}}">  
+                            {% endwith %}
                         </div>
                     </form>
                 </div>
