@@ -1,0 +1,34 @@
+<script type="text/javascript">
+    handleEnableDisable()
+    $('.qty-input').change(function(){
+        handleEnableDisable()
+    })
+
+    function handleEnableDisable(){
+        console.log('handleEnableDisable')
+        var currentValue = parseInt($('.qty-input').val());
+        var minusDisable = currentValue < 2 ;
+        var plusDisable = currentValue >98;
+        console.log('handleEnableDisable',currentValue)
+        $('.incr').prop('disabled', plusDisable);
+        $('.dcr').prop('disabled', minusDisable);
+
+    }
+    // Increment quantity
+    $('.increment-qty').click(function(e){
+        e.preventDefault();
+        var closesInput = $(this).closest('.input-group').find('.qty-input')[0];
+        var currentValue = parseInt($(closesInput).val());
+        $(closesInput).val(currentValue+1);
+        handleEnableDisable();
+    })
+
+    // Decrement quantity
+    $('.decrement-qty').click(function(e){
+        e.preventDefault();
+        var closesInput = $(this).closest('.input-group').find('.qty-input')[0];
+        var currentValue = parseInt($(closesInput).val());
+        $(closesInput).val(currentValue-1);
+        handleEnableDisable();
+    })    
+</script>

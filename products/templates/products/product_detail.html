@@ -65,7 +65,25 @@
                                     <p class="mt-3"><strong>Quantity:</strong></p>
                                     <div class="form-group w-50">
                                         <div class="input-group">
-                                            <input class="form-control qty-input rounded-0" type="number" name="quantity" value="1" min="1" max="99" id="id_qty_{{product.id}}">
+                                            <div class="input-group-prepend">
+                                                <button class="dcr btn btn-black rounded-0 decrement-qty"
+                                                    data-item-id="{{product.id}}" id="dcr decrement-qty-{{product.id}}">
+                                                    <span class="icon">
+                                                        <i class="fa fa-minus"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <input class="form-control qty-input rounded-0" type="number" 
+                                                name="quantity" value="1" min="1" max="99" 
+                                                id="id_qty_{{product.id}}">    
+                                            <div class="input-group-append">
+                                                <button class="incr rounded-0 btn btn-black increment-qty"
+                                                    data-item-id="{{product.id}}" id="increment-qty-{{product.id}}">
+                                                    <span class="icon">
+                                                        <i class="fa fa-plus"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -86,4 +104,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{block.super}}
+    {% include 'products/includes/quantity_input_script.html' %}
 {% endblock %}
