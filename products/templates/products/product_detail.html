@@ -67,7 +67,7 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <button class="dcr btn btn-black rounded-0 decrement-qty"
-                                                    data-item-id="{{product.id}}" id="dcr decrement-qty-{{product.id}}">
+                                                    data-item-id="{{product.id}}" id="decrement-qty-{{product.id}}">
                                                     <span class="icon">
                                                         <i class="fa fa-minus"></i>
                                                     </span>
@@ -75,7 +75,7 @@
                                             </div>
                                             <input class="form-control qty-input rounded-0" type="number" 
                                                 name="quantity" value="1" min="1" max="99" 
-                                                id="id_qty_{{product.id}}">    
+                                                id="id_qty_{{product.id}}" data-item_id="{{product.id}}">  
                                             <div class="input-group-append">
                                                 <button class="incr rounded-0 btn btn-black increment-qty"
                                                     data-item-id="{{product.id}}" id="increment-qty-{{product.id}}">

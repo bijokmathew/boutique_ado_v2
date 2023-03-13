@@ -1,17 +1,28 @@
 <script type="text/javascript">
-    handleEnableDisable()
+    // Check enable/disable every time the input is changed
     $('.qty-input').change(function(){
-        handleEnableDisable()
+        var itemId= $(this).data('item-id');
+        handleEnableDisable(itemId);
     })
 
-    function handleEnableDisable(){
+    // Ensure proper enabling/disabling of all inputs on page load
+    var allQtyInputs = $('.qty-input');
+    console.log('allQtyInputs', allQtyInputs)
+    for(var i = 0; i < allQtyInputs.length; i++){
+        var itemId = $(allQtyInputs[i]).data('item-id');
+        handleEnableDisable(itemId);
+    }
+
+    // Disable +/- buttons outside 1-99 range
+    function handleEnableDisable(itemId){
+        console.log(" handleEnableDisable itemId==", itemId)
         console.log('handleEnableDisable')
-        var currentValue = parseInt($('.qty-input').val());
+        var currentValue = parseInt($(`#id_qty_${itemId}`).val());
         var minusDisable = currentValue < 2 ;
-        var plusDisable = currentValue >98;
-        console.log('handleEnableDisable',currentValue)
-        $('.incr').prop('disabled', plusDisable);
-        $('.dcr').prop('disabled', minusDisable);
+        var plusDisable = currentValue > 98;
+        console.log('handleEnableDisable currentValue',minusDisable)
+        $(`#decrement-qty-${itemId}`).prop('disabled', minusDisable);
+        $(`#increment-qty-${itemId}`).prop('disabled', plusDisable);
 
     }
     // Increment quantity
@@ -20,7 +31,9 @@
         var closesInput = $(this).closest('.input-group').find('.qty-input')[0];
         var currentValue = parseInt($(closesInput).val());
         $(closesInput).val(currentValue+1);
-        handleEnableDisable();
+        console.log('this',$(this) )
+        var itemId = $(this).data('item-id');
+        handleEnableDisable(itemId);
     })
 
     // Decrement quantity
@@ -29,6 +42,7 @@
         var closesInput = $(this).closest('.input-group').find('.qty-input')[0];
         var currentValue = parseInt($(closesInput).val());
         $(closesInput).val(currentValue-1);
-        handleEnableDisable();
+        var itemId = $(this).data('item-id');
+        handleEnableDisable(itemId);
     })    
 </script>
