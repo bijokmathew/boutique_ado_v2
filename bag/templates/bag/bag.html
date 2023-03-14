@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bag_tools %}
 
 {% block page_header %}
     <div class="container header-container">
@@ -49,7 +50,7 @@
                                             <p class="my-0">{{item.product.price}}</p>
                                         </td>
                                         <td class="py-3 w-25">
-                                            <form class="update-form" method="POST" action="">
+                                            <form class="form update-form" method="POST" action="{% url 'adjust_bag' item.item_id %}">
                                                 {% csrf_token %}
                                                 <div class="form-group">
                                                     <div class="input-group">
@@ -78,11 +79,12 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                            <a class="text-info update-link" href=""><small>Update</small></a>
-                                            <a class="text-danger remove-item float-right" id="remove_{{item.item_id}}" data-size="{{item.size}}"  href=""><small>Remove</small></a>
+                                            <a class="text-info update-link"><small>Update</small></a>
+                                            <a class="text-danger remove-item float-right" id="remove_{{item.item_id}}"
+                                                data-product_size="{{item.size}}"><small>Remove</small></a>
                                         </td>
                                         <td class="py-3">
-                                            <p class="my-0">{{item.product.price}}</p>
+                                            <p class="my-0">{{item.product.price | calc_subtotal:item.quantity}}</p>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -93,7 +95,8 @@
                                         <h4 class="mt-4"><strong>Grand Total: $ {{grandtotal|floatformat:2}}</strong></h4>
                                         {% if free_delivery_delta > 0 %}
                                             <p class="mb-1 text-danger">
-                                                You could get free delivery by spending just <strong>${{free_delivery_delta}}</strong> more !
+                                                You could get free delivery by spending just <strong>
+                                                    ${{free_delivery_delta}}</strong> more !
                                             </p>
                                         {% endif %}
                                     </td>
@@ -138,18 +141,19 @@
     <script type="text/javascript">
         // Update quatity on click
         $('.update-link').click(function(e){
+            console.log("update-link")
             var form = $(this).prev('.update-form');
-            form.submit()
+            form.submit();
         })
         // Delete quatity on click
         $('.remove-item').click(function(e){
             var csrfToken = "{{csrf_token}}";
             var itemId = $(this).attr('id').split("remove_")[1];
-            var size = $(this).data('size');
-            var url =`/bag/remove/${itemId}`
+            var size = $(this).data('product_size');
+            var url =`/bag/remove/${itemId}/`
             var data = { 
                 'csrfmiddlewaretoken': csrfToken,
-                'size': size,
+                'product_size': size,
             }
             $.post(url, data)
                 .done(function(){

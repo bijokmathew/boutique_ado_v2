@@ -8,7 +8,6 @@ def bag_contents(request):
     bag_items = []
     total = 0
     product_count = 0
-    print("execute bag_cntents")
     bag = request.session.get('bag', {})
     for item_id, item_data in bag.items():
         product = get_object_or_404(Product, pk=item_id)
