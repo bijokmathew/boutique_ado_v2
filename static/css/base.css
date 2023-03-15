@@ -109,6 +109,44 @@ a.category-badge > span.badge:hover {
     height: 2px;
 }
 
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent; 
+    border-bottom: 5px solid black;
+  }
+
+  .arrow-primary {
+    border-bottom-color: #007bff ;
+  }
+  .arrow-secondary {
+    border-bottom-color: #6c757d ;
+  }
+  .arrow-success {
+    border-bottom-color: #28a745 ;
+  }
+  .arrow-danger {
+    border-bottom-color: #dc3545 ;
+  }
+  .arrow-warning {
+    border-bottom-color: #ffc107 ;
+  }
+  .arrow-info {
+    border-bottom-color: #17a2b8 ;
+  }
+  .arrow-light {
+    border-bottom-color: #f8f9fa ;
+  }
+  .arrow-dark {
+    border-bottom-color: #343a40 ;
+  }
+
+  .bag-notification-wrapper {
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 /* ----------------media query */
 
 /* slightly larger container on xl screen */
