@@ -32,7 +32,7 @@ class Order(models.Model):
 
     def update_total(self):
         """
-        Update grand total by adding the inline_total 
+        Update grand total by adding the inline_total
         to the specific order
         """
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum']
@@ -46,7 +46,7 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         """
         Override the original save method to set
-        order number it it has not set already
+        order number if it has not set already
         """
         if not slef.order_number():
             self.order_number = self.__generate_order_number()
@@ -61,7 +61,7 @@ class OrderLineItem(models.Model):
     This model has all products related to specific order
     """
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=False, blank=False, related_name='lineitems')
-    product = models.ForeignKey(Order, on_delete=models.CASCADE, null=False, blank=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, blank=False)
     quantity = models.IntegerField(null=False, blank=False, default=0)
     product_size = models.CharField(max_length=3, null=True, blank=False)
     linitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False)
