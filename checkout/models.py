@@ -35,7 +35,7 @@ class Order(models.Model):
         Update grand total by adding the inline_total
         to the specific order
         """
-        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum']
+        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE/100
         else:
@@ -48,7 +48,7 @@ class Order(models.Model):
         Override the original save method to set
         order number if it has not set already
         """
-        if not slef.order_number():
+        if not self.order_number:
             self.order_number = self.__generate_order_number()
         super().save(*args, **kwargs)
  
@@ -63,8 +63,8 @@ class OrderLineItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=False, blank=False, related_name='lineitems')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, blank=False)
     quantity = models.IntegerField(null=False, blank=False, default=0)
-    product_size = models.CharField(max_length=3, null=True, blank=False)
-    linitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False)
+    product_size = models.CharField(max_length=3, null=True, blank=True)
+    lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
 
     def __str__(self):
         return f'SKU: {self.product.sku} on order {self.order.order_number}'
@@ -75,4 +75,4 @@ class OrderLineItem(models.Model):
         lineitem_total and update the order total
         """
         self.lineitem_total = self.product.price * self.quantity
-        super().save(*arg, **kwargs)
+        super().save(*args, **kwargs)
