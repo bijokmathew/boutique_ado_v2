@@ -14,7 +14,7 @@ def webhook(request):
     """
     print('--------------webhook----------')
     # setup
-    wh_secret = settings.STRIPE_WH_SECRET
+    wh_secret = 'whsec_4vFBzyvMq6hVIMwr1u71O4lZXObXChJy'  # settings.STRIPE_WH_SECRET
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     # Get the webhook data and verify its signature
