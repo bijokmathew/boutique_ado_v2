@@ -45,6 +45,7 @@ card.addEventListener('change', function(event){
 
 // Handle form submit
 var form = document.getElementById('payment-form');
+console.log('form,' , form.street_address1.val())
 
 form.addEventListener('submit', function(ev) {
   console.log("form addEventListener")

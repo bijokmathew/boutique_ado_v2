@@ -23,7 +23,7 @@ class StripeWH_handler:
         subject = render_to_string(
             'checkout/confirmation_emails/confirmation_email_subject.txt',
             {
-                'order: order'
+                'order': order
             }
         )
         body = render_to_string(
@@ -60,7 +60,6 @@ class StripeWH_handler:
         pid = intent.id
         bag = intent.metadata.bag
         save_info = intent.metadata.save_info
-
         # Get charge object
         stripe_charge = stripe.Charge.retrieve(
             intent.latest_charge
@@ -73,21 +72,6 @@ class StripeWH_handler:
         for field, value in shipping_details.address.items():
             if value == '':
                 shipping_details.address[field] = None
-        
-        # Updated the profile info if save_info was checked
-        profile = None
-        username = intent.metadata.username
-        if username != 'AnonymousUser':
-            profile = UserProfile.objects.get(user__username=username)
-            if save_info:
-                profile.default_phone_number = shipping_details.phone,
-                profile.default_country = shipping_details.address.country,
-                profile.default_postcode = shipping_details.address.postal_code,
-                profile.default_town_or_city = shipping_details.address.city,
-                profile.default_street_address1 = shipping_details.address.line1,
-                profile.default_street_address2 = shipping_details.address.line2,
-                profile.default_county = shipping_details.address.state,
-                profile.save() 
         attempt = 1
         order_exits = False
 
@@ -155,6 +139,7 @@ class StripeWH_handler:
                                 product_size=size,
                             )
                             order_line_item.save()
+                
             except Exception as e:
                 if order:
                     order.delete()
@@ -162,7 +147,22 @@ class StripeWH_handler:
                     content=f'Webhook recieved: {event["type"]} | ERROR: {e}',
                     status=500
                 )
-        self._send_confirmation_email(order)
+            # Updated the profile info if save_info was checked
+            profile = None
+            print("shipping_details.address.line1", shipping_details.address.line1)
+            username = intent.metadata.username
+            if username != 'AnonymousUser':
+                profile = UserProfile.objects.get(user__username=username)
+                if save_info:
+                    profile.default_phone_number = shipping_details.phone,
+                    profile.default_country = shipping_details.address.country,
+                    profile.default_postcode = shipping_details.address.postal_code,
+                    profile.default_town_or_city = shipping_details.address.city,
+                    profile.default_street_address1 = shipping_details.address.line1,
+                    profile.default_street_address2 = shipping_details.address.line2,
+                    profile.default_county = shipping_details.address.state,
+                    profile.save()
+            self._send_confirmation_email(order)
         return HttpResponse(
            content=f'Webhook succ recieved: {event["type"]} | Success: created order in webhook ',
            status=200
